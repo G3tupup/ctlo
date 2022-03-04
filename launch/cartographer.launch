@@ -1,0 +1,13 @@
+<launch>
+    <arg name="rviz" default="true" />
+    <group if="$(arg rviz)">
+        <node launch-prefix="nice" pkg="rviz" type="rviz" name="rviz" args="-d $(find ctlo)/rviz/lidar_odometry.rviz" />
+    </group>
+    <!-- remember to set point_num_per_line_ in feature_processor.hpp  to 900 -->
+    <node pkg="ctlo" name="lidar_odometry" type="lidar_odometry" output="screen">
+        <param name="lidar_topic" type="string" value="horizontal_laser_3d" />
+        <param name="rosbag_folder_name" type="string" value="/home/getup/bag/" />
+        <param name="rosbag_file_name" type="string" value="b3-2015-12-10-13-55-20" />
+        <param name="accumulate_count" type="int" value="75" />
+    </node>
+</launch>
