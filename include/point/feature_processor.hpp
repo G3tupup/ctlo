@@ -75,7 +75,7 @@ class FeatureProcessor {
   static constexpr float max_break_angle_ = 0.15f;
   static constexpr size_t outlier_max_num_ = 20;
   static constexpr float max_plane_curvature_ =
-      0.06f / static_cast<float>(neighbor_half_width_);
+      0.004f / static_cast<float>(neighbor_half_width_);
   static constexpr float min_edge_curvature_ = max_plane_curvature_ * 3.f;
   static constexpr float invalid_curvature_ =
       (max_plane_curvature_ + min_edge_curvature_) * 0.5f;
@@ -367,8 +367,9 @@ class FeatureProcessor {
       if (valid_num > neighbor_half_width_ &&
           state_matrix_(row, neighbor_half_width_)) {
         point_image_(row, size_t(neighbor_half_width_)).curvature =
-            std::abs(range_sum / static_cast<float>(valid_num) -
-                     range_matrix_(row, neighbor_half_width_));
+            std::abs(range_sum / static_cast<float>(valid_num) /
+                         range_matrix_(row, neighbor_half_width_) -
+                     1.f);
       } else {
         point_image_(row, size_t(neighbor_half_width_)).curvature =
             invalid_curvature_;
@@ -386,8 +387,9 @@ class FeatureProcessor {
         auto cur_col = point_image_.validCol(col + neighbor_half_width_);
         if (valid_num > neighbor_half_width_ && state_matrix_(row, cur_col)) {
           point_image_(row, cur_col).curvature =
-              std::abs(range_sum / static_cast<float>(valid_num) -
-                       range_matrix_(row, cur_col));
+              std::abs(range_sum / static_cast<float>(valid_num) /
+                           range_matrix_(row, cur_col) -
+                       1.f);
         } else {
           point_image_(row, cur_col).curvature = invalid_curvature_;
         }

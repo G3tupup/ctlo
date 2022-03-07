@@ -56,7 +56,7 @@ VLP16 data collected by a UGV is highly recommended. Here are some tested public
 - [cartographer](https://google-cartographer-ros.readthedocs.io/en/latest/data.html#id4)
 
 # Keystones
-- feature extraction proposed in [LeGO-LOAM](https://github.com/RobustFieldAutonomyLab/LeGO-LOAM)
+- feature extraction proposed in [LeGO-LOAM](https://github.com/RobustFieldAutonomyLab/LeGO-LOAM) and improve it
 - continuous time solver proposed in [CT-ICP](https://github.com/jedeschaud/ct_icp)
 - iterative ndt in voxels for fast data assosiation and O(1) sliding window map update
 
