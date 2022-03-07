@@ -1,6 +1,6 @@
 # CTLO：Continuous Time Lidar Odometry
 
-CTLO is a light-weight Continuous Time Lidar Odometry for lidar data collected by UGVs. As a pure lidar odometry, It can achieve 40-50hz with high accuracy.
+CTLO is a light-weight Continuous Time Lidar Odometry for lidar data collected by UGVs. As a pure lidar odometry, It can achieve over 50hz with high accuracy.
 
 <div  align="center">  
 <img src="image/hdl_400.png" width = "540" align=center />

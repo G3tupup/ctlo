@@ -24,12 +24,11 @@ class ActiveFeatureMap {
  private:
   template <typename T>
   using Container = pcl::PointCloud<T>;
-  static constexpr float edge_voxel_size_ = 0.25f;
-  static constexpr float plane_voxel_size_ = 0.25f;
-  static constexpr size_t max_iteration_ = 3;
+  static constexpr float edge_voxel_size_ = 0.6f;
+  static constexpr float plane_voxel_size_ = 0.6f;
+  static constexpr size_t max_iteration_ = 4;
   static constexpr size_t window_size_ = 500;
-  static constexpr float ratio_thresh_ =
-      10.f / static_cast<float>(window_size_);
+  static constexpr float ratio_thresh_ = 1.f / static_cast<float>(window_size_);
   static constexpr double fix_weight_ = 0.06;
   static constexpr double delta_weight_ = 0.08;
   voxel::VoxelGrid<point::Ndt3f, Container> edge_grid_, plane_grid_;
@@ -61,13 +60,13 @@ class ActiveFeatureMap {
       const auto pose_bf = begin_pose.cast<float>();
       const auto pose_ef = end_pose.cast<float>();
       findCorrelations(edges, edge_grid_, pose_bf, pose_ef,
-                       max_iteration_ - iter, common::getPrinciple,
+                       max_iteration_ - iter - 1, common::getPrinciple,
                        source_edges, target_edges, edge_principles,
                        edge_distortions, edge_weights);
       findCorrelations(planes, plane_grid_, pose_bf, pose_ef,
-                       max_iteration_ - iter, common::getNormal, source_planes,
-                       target_planes, plane_normals, plane_distortions,
-                       plane_weights);
+                       max_iteration_ - iter - 1, common::getNormal,
+                       source_planes, target_planes, plane_normals,
+                       plane_distortions, plane_weights);
       std::cout << "edge_correlation: " << source_edges.size()
                 << ", plane_correlation: " << source_planes.size() << std::endl;
       solver::CTPoseSolver solver(begin_pose, end_pose);
@@ -150,9 +149,11 @@ class ActiveFeatureMap {
       for (int i = -bound; i <= bound; ++i) {
         for (int j = -bound; j <= bound; ++j) {
           for (int k = -bound; k <= bound; ++k) {
-            const auto map_index = map.get(index + Eigen::Array3i(i, j, k));
-            if (map_index != std::numeric_limits<size_t>::max()) {
-              ndt += map[map_index];
+            if (i * i + j * j + k * k <= bound * bound) {
+              const auto map_index = map.get(index + Eigen::Array3i(i, j, k));
+              if (map_index != std::numeric_limits<size_t>::max()) {
+                ndt += map[map_index];
+              }
             }
           }
         }
