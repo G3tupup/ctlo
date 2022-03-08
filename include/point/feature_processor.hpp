@@ -116,7 +116,7 @@ class FeatureProcessor {
     auto order_value = getOrderValue(points);
     rasterizePoints(points, order_value);
     getDistortions(order_value);
-    markGroundPoints();
+    markGroundPoints();  // comment this if indoor/UAV enviroment
     markNongroundPoints();
     getPointsCurvature();
     getAllPoints();

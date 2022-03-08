@@ -56,11 +56,12 @@ VLP16 data collected by a UGV is highly recommended. Here are some tested public
 - [cartographer](https://google-cartographer-ros.readthedocs.io/en/latest/data.html#id4)
 
 # Keystones
-- feature extraction proposed in [LeGO-LOAM](https://github.com/RobustFieldAutonomyLab/LeGO-LOAM) and improve it
+
+- feature extraction proposed in [LeGO-LOAM](https://github.com/RobustFieldAutonomyLab/LeGO-LOAM) and improved
 - continuous time solver proposed in [CT-ICP](https://github.com/jedeschaud/ct_icp)
 - iterative ndt in voxels for fast data assosiation and O(1) sliding window map update
 
 # Known Issues
 
 - Default parameters in feature_processor.hpp are for VLP16 data, and you need to modify some of them for other kinds of lidar.
-- Feature extraction is similar with LeGO-LOAM, so it may not behave well for UAVs datasets.
+- Feature extraction is similar with LeGO-LOAM, so it performs well for ground outdoor environment. Commenting function markGroundPoints() in feature_processor.hpp can help to cover with indoor/UAV environment. 
