@@ -49,11 +49,11 @@ CTLO is tested in Ubuntu 16.04, 18.04 and 20.04. Please install the following li
 
 # Datasets
 
-VLP16 data collected by a UGV is highly recommended. Here are some tested public datasets: 
+VLP16/HDL32 data collected by a UGV is highly recommended. Here are some tested public datasets: 
 
-- [hdl_400](https://github.com/koide3/hdl_graph_slam)
-- [same_position](https://github.com/RobustFieldAutonomyLab/jackal_dataset_20170608)
-- [cartographer](https://google-cartographer-ros.readthedocs.io/en/latest/data.html#id4)
+- [same_position(VLP16)](https://github.com/RobustFieldAutonomyLab/jackal_dataset_20170608)
+- [hdl_400(HDL32)](https://github.com/koide3/hdl_graph_slam)
+- [cartographer(VLP16)](https://google-cartographer-ros.readthedocs.io/en/latest/data.html#id4)
 
 # Keystones
 
@@ -63,5 +63,5 @@ VLP16 data collected by a UGV is highly recommended. Here are some tested public
 
 # Known Issues
 
-- Default parameters in feature_processor.hpp are for VLP16 data, and you need to modify some of them for other kinds of lidar.
+- Default parameters in feature_processor.hpp are for VLP16/HDL32 data, and you need to modify some of them for other kinds of lidar.
 - Feature extraction is similar with LeGO-LOAM, so it performs well for ground outdoor environment. Commenting function markGroundPoints() in feature_processor.hpp can help to cover with indoor/UAV environment. 

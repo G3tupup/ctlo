@@ -37,10 +37,11 @@ class FeatureProcessor {
   }
 
  private:
-  static constexpr size_t lidar_line_num_ = 16;
+  static constexpr size_t lidar_line_num_ = 16;  // 32 for HDL32
   static constexpr size_t point_num_per_line_ = 1800;
-  static constexpr float elevation_range_ = math::pi<float>() * 30.f / 180.f,
-                         azimuth_range_ = math::twoPi<float>();
+  static constexpr float elevation_range_ =
+      math::pi<float>() * 30.f / 180.f;  // 41.333333f for HDL32
+  static constexpr float azimuth_range_ = math::twoPi<float>();
   static constexpr float min_range_ = 0.1f, max_range_ = 120.f;
   static constexpr float lidar_mount_elevation_ = 0.f;
 
@@ -48,7 +49,8 @@ class FeatureProcessor {
       elevation_range_ / static_cast<float>(lidar_line_num_ - 1);
   static constexpr float azimuth_resolution_ =
       azimuth_range_ / static_cast<float>(point_num_per_line_);
-  static constexpr float min_elevation_ = -math::pi<float>() * 15.f / 180.f;
+  static constexpr float min_elevation_ =
+      -math::pi<float>() * 15.f / 180.f;  // 30.666667f for HDL32
   static constexpr float max_elevation_ =
       min_elevation_ + elevation_resolution_ * (lidar_line_num_ - 1);
   static constexpr float min_azimuth_ = -math::pi<float>();
