@@ -29,8 +29,8 @@ class ActiveFeatureMap {
   static constexpr size_t max_iteration_ = 4;
   static constexpr size_t window_size_ = 500;
   static constexpr float ratio_thresh_ = 1.f / static_cast<float>(window_size_);
-  static constexpr double fix_weight_ = 0.06;
-  static constexpr double delta_weight_ = 0.08;
+  static constexpr double fix_weight_ = 0.2;
+  static constexpr double delta_weight_ = 0.15;
   voxel::VoxelGrid<point::Ndt3f, Container> edge_grid_, plane_grid_;
   std::queue<std::shared_ptr<Container<point::Ndt3f>>> added_edges_,
       added_planes_;
