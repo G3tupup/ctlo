@@ -45,7 +45,7 @@ inline Point3<T> cartesianToSphere(const Point3<T>& cartesian) {
   if (math::ifZero(range)) {
     return Point3<T>::Zero();
   }
-  return {range, std::atan2(cartesian.y(), cartesian.x()),
+  return {range, math::fastAtan2(cartesian.y(), cartesian.x()),
           std::asin(cartesian.z() / range)};
 }
 

@@ -214,10 +214,9 @@ class FeatureProcessor {
       const auto cartesian = getCartesian(point);
       const auto sphere = cartesianToSphere(cartesian);
       if (sphere.x() >= min_range_ && sphere.x() <= max_range_) {
-        size_t row(
-            std::round((sphere.z() - min_elevation_) / elevation_resolution_));
-        size_t col(
-            std::round((sphere.y() - min_azimuth_) / azimuth_resolution_));
+        size_t row((sphere.z() - min_elevation_) / elevation_resolution_ +
+                   0.5f);
+        size_t col((sphere.y() - min_azimuth_) / azimuth_resolution_ + 0.5f);
         if (col == point_num_per_line_) col = 0;
         if (row % image_height_sample_step_ == 0 &&
             col % image_width_sample_step_ == 0) {
@@ -265,7 +264,7 @@ class FeatureProcessor {
     const float inv = 1.f / (order_value.y() - order_value.x());
     for (size_t row = 0; row < image_height_; ++row) {
       for (size_t col = 0; col < image_width_; ++col) {
-        if (state_matrix_(row, col) == 1) {
+        if (state_matrix_(row, col)) {
           auto& point = point_image_(row, col);
           point.distortion = (point.distortion - order_value.x()) * inv;
         }
@@ -282,8 +281,7 @@ class FeatureProcessor {
           if (std::abs(
                   math::fastAtan2(diff.z(), std::hypot(diff.x(), diff.y())) +
                   lidar_mount_elevation_) <= max_ground_angle_) {
-            state_matrix_(row, col) = 2;
-            state_matrix_(row + 1, col) = 2;
+            state_matrix_(row, col) = state_matrix_(row + 1, col) = 2;
           }
         }
       }
@@ -293,18 +291,19 @@ class FeatureProcessor {
   void markNongroundPoints() {
     for (size_t row = 0; row < image_height_; ++row) {
       for (size_t col = 0; col < image_width_; ++col) {
-        if (state_matrix_(row, col) == 1) markRegion(row, col);
+        markRegion(row, col);
       }
     }
   }
 
   void markRegion(const size_t row, const size_t col) {
+    if (state_matrix_(row, col) != 1) return;
     state_matrix_(row, col) = 3;
     std::stack<Eigen::Array2i> indices_to_search;
     std::vector<Eigen::Array2i> finished_indices;
-    indices_to_search.push(Eigen::Array2i(row, col));
+    indices_to_search.emplace(row, col);
     while (!indices_to_search.empty()) {
-      const auto search_index = indices_to_search.top();
+      const auto search_index = std::move(indices_to_search.top());
       indices_to_search.pop();
       for (const auto& direction : search_directions_) {
         Eigen::Array2i neighbor_index = search_index + direction;
