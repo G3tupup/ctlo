@@ -42,10 +42,11 @@ CTLO is tested in Ubuntu 16.04, 18.04 and 20.04. Please install the following li
 - rosbag_file_name: the name of your rosbag.
 - accumulate_count: the number of pointcloud which belongs in one frame. (1 for default and 75 for cartographer datasets)
 
-## Tips for higher speed
+## Tips for higher speed(up to 100hz)
 
 - set OPENMPTHREAD in active_feature_map.hpp larger if your cpu have more cores.
-- set image_width_sample_step_ in feature_processor.hpp to 2/3/4 to reduce feature number.(This may reduce a bit of accuracy and robustness.)
+- set image_height_sample_step_ in feature_processor.hpp to 2/3 to reduce point cloud size.(This may reduce a bit of accuracy and robustness.)
+- set edge_feature_num_per_sub_line_ in feature_processor.hpp to 2/1 to reduce feature number.(This may reduce a bit of accuracy and robustness.)
 
 # Datasets
 
@@ -59,7 +60,7 @@ VLP16/HDL32 data collected by a UGV is highly recommended. Here are some tested 
 
 - feature extraction proposed in [LeGO-LOAM](https://github.com/RobustFieldAutonomyLab/LeGO-LOAM) and improved
 - continuous time solver proposed in [CT-ICP](https://github.com/jedeschaud/ct_icp)
-- iterative ndt in voxels for fast data assosiation and O(1) sliding window map update
+- incremental ndt in voxels for fast data assosiation and O(1) sliding window map update
 
 # Known Issues
 
