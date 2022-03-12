@@ -38,7 +38,7 @@ class FeatureProcessor {
 
  private:
   static constexpr size_t lidar_line_num_ = 16;  // 32 for HDL32
-  static constexpr size_t point_num_per_line_ = 1800;
+  static constexpr size_t point_num_per_line_ = 900;
   static constexpr float elevation_range_ =
       math::pi<float>() * 30.f / 180.f;  // 41.333333f for HDL32
   static constexpr float azimuth_range_ = math::twoPi<float>();

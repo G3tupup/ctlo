@@ -2,12 +2,22 @@
 
 CTLO is a light-weight Continuous Time Lidar Odometry for lidar data collected by UGVs. As a pure lidar odometry, It can achieve over 50hz with high accuracy.
 
-<div  align="center">  
+<div  align="center">
+<img src="image/nsh_indoor_outdoor.png" width = "540" align=center />
+</div>
+<center>nsh_indoor_outdoor</center>
+
+<div  align="center">
+<img src="image/rotation_dataset.png" width = "540" align=center />
+</div>
+<center>rotation_dataset</center>
+
+<div  align="center">
 <img src="image/hdl_400.png" width = "540" align=center />
 </div>
 <center>hdl_400</center>
 
-<div  align="center">  
+<div  align="center">
 <img src="image/Deutsches Museum.png" width = "540" align=center />
 </div>
 <center>Deutsches Museum</center>
@@ -52,6 +62,8 @@ CTLO is tested in Ubuntu 16.04, 18.04 and 20.04. Please install the following li
 
 VLP16/HDL32 data collected by a UGV is highly recommended. Here are some tested public datasets: 
 
+- [nsh_indoor_outdoor(VLP16)](https://github.com/laboshinl/loam_velodyne)
+- [rotation_dataset(VLP16)](https://github.com/TixiaoShan/LIO-SAM)
 - [same_position(VLP16)](https://github.com/RobustFieldAutonomyLab/jackal_dataset_20170608)
 - [hdl_400(HDL32)](https://github.com/koide3/hdl_graph_slam)
 - [cartographer(VLP16)](https://google-cartographer-ros.readthedocs.io/en/latest/data.html#id4)

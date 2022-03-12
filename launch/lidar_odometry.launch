@@ -6,7 +6,7 @@
     <node pkg="ctlo" name="lidar_odometry" type="lidar_odometry" output="screen">
         <param name="lidar_topic" type="string" value="/velodyne_points" />
         <param name="rosbag_folder_name" type="string" value="/home/getup/bag/" />
-        <param name="rosbag_file_name" type="string" value="same_position" />
+        <param name="rosbag_file_name" type="string" value="nsh_indoor_outdoor" />
         <param name="accumulate_count" type="int" value="1" />
     </node>
 </launch>
