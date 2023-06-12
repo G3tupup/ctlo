@@ -154,7 +154,7 @@ class VoxelGrid {
       points_[result] = point;
     }
     return result;
-  };
+  }
 
  public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW

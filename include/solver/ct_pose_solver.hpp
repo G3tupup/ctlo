@@ -16,12 +16,10 @@ class CTPoseSolver {
     options_.minimizer_progress_to_stdout = false;
     problem_.AddParameterBlock(beg_tra_param_, 3);
     problem_.AddParameterBlock(beg_rot_param_, 4);
-    problem_.SetParameterization(beg_rot_param_,
-                                 new ceres::EigenQuaternionParameterization);
+    problem_.SetManifold(beg_rot_param_, new ceres::EigenQuaternionManifold);
     problem_.AddParameterBlock(end_tra_param_, 3);
     problem_.AddParameterBlock(end_rot_param_, 4);
-    problem_.SetParameterization(end_rot_param_,
-                                 new ceres::EigenQuaternionParameterization);
+    problem_.SetManifold(end_rot_param_, new ceres::EigenQuaternionManifold);
   }
 
   CTPoseSolver(const CTPoseSolver& rhs) = delete;

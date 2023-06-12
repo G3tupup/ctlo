@@ -24,13 +24,13 @@ class ActiveFeatureMap {
  private:
   template <typename T>
   using Container = pcl::PointCloud<T>;
-  static constexpr float edge_voxel_size_ = 0.6f;
-  static constexpr float plane_voxel_size_ = 0.6f;
+  static constexpr float edge_voxel_size_ = 0.3f;
+  static constexpr float plane_voxel_size_ = 0.3f;
   static constexpr size_t max_iteration_ = 4;
   static constexpr size_t window_size_ = 500;
   static constexpr float ratio_thresh_ = 1.f / static_cast<float>(window_size_);
   static constexpr double fix_weight_ = 0.2;
-  static constexpr double delta_weight_ = 0.15;
+  static constexpr double delta_weight_ = 0.2;
   voxel::VoxelGrid<point::Ndt3f, Container> edge_grid_, plane_grid_;
   std::queue<std::shared_ptr<Container<point::Ndt3f>>> added_edges_,
       added_planes_;
@@ -93,8 +93,13 @@ class ActiveFeatureMap {
               const Container<point::RPoint>& planes,
               const transform::Rigid3d& begin_pose,
               const transform::Rigid3d& end_pose) {
-    if (ifKeyFrame(*toNdts(edge_features, begin_pose, end_pose), edge_grid_)) {
-      auto edge_ndts = toNdts(edges, begin_pose, end_pose);
+    static const Eigen::Matrix3f edge_info =
+        Eigen::Matrix3f::Identity() / math::pow2(edge_voxel_size_);
+    static const Eigen::Matrix3f plane_info =
+        Eigen::Matrix3f::Identity() / math::pow2(plane_voxel_size_);
+    if (ifKeyFrame(*toNdts(edge_features, begin_pose, end_pose, edge_info),
+                   edge_grid_)) {
+      auto edge_ndts = toNdts(edges, begin_pose, end_pose, edge_info);
       edge_grid_.add(*edge_ndts);
       added_edges_.push(edge_ndts);
       if (added_edges_.size() > window_size_) {
@@ -102,9 +107,9 @@ class ActiveFeatureMap {
         added_edges_.pop();
       }
     }
-    if (ifKeyFrame(*toNdts(plane_features, begin_pose, end_pose),
+    if (ifKeyFrame(*toNdts(plane_features, begin_pose, end_pose, plane_info),
                    plane_grid_)) {
-      auto plane_ndts = toNdts(planes, begin_pose, end_pose);
+      auto plane_ndts = toNdts(planes, begin_pose, end_pose, plane_info);
       plane_grid_.add(*plane_ndts);
       added_planes_.push(plane_ndts);
       if (added_planes_.size() > window_size_) {
@@ -158,8 +163,10 @@ class ActiveFeatureMap {
           }
         }
       }
-      if (ndt.num() < static_cast<size_t>(std::max(3, bound * 2 + 1))) continue;
-      auto pair = func(ndt.var());
+      if (ndt.num() == 0) {
+        continue;
+      }
+      auto pair = func(ndt.cov());
 #ifdef OPENMPTHREAD
       std::unique_lock<std::mutex> lock(mutex);
 #endif
@@ -173,8 +180,8 @@ class ActiveFeatureMap {
 
   static std::shared_ptr<Container<point::Ndt3f>> toNdts(
       const Container<point::RPoint>& points,
-      const transform::Rigid3d& begin_pose,
-      const transform::Rigid3d& end_pose) {
+      const transform::Rigid3d& begin_pose, const transform::Rigid3d& end_pose,
+      const Eigen::Matrix3f& info) {
     std::shared_ptr<Container<point::Ndt3f>> result =
         std::make_shared<Container<point::Ndt3f>>();
     result->reserve(points.size());
@@ -183,7 +190,8 @@ class ActiveFeatureMap {
     for (const auto& point : points) {
       result->push_back(point::Ndt3f(
           transform::interpolate(pose_bf, pose_ef, point.distortion) *
-          point.point()));
+              point.point(),
+          info));
     }
     return result;
   }
